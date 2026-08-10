@@ -5,7 +5,7 @@ import requests
 st.set_page_config(page_title="하이마트 MD 실시간 최저가 모니터링", layout="wide")
 st.title("📊 모델별 실시간 최저가 모니터링 대시보드 (네이버 API)")
 
-# 💡 여기에 발급받은 네이버 API 키를 입력하세요
+# 💡 여기에 발급받은 네이버 API 키를 입력하세요 (큰따옴표 안에 입력)
 NAVER_CLIENT_ID = "lvrp66pn2x"
 NAVER_CLIENT_SECRET = "RCanlHnDDfu8N6GXKuv4Vd8afp2zKL4nhprbmKLL"
 
@@ -25,7 +25,7 @@ def get_naver_shopping_data(query):
     response = requests.get(url, headers=headers, params=params)
     
     if response.status_code == 200:
-        return response.json()['items']
+        return response.json().get('items', [])
     else:
         st.error(f"API 연결 에러가 발생했습니다. (에러 코드: {response.status_code})")
         return []
@@ -34,8 +34,8 @@ st.sidebar.header("검색 필터")
 selected_model = st.sidebar.text_input("🔍 분석할 모델명을 입력하세요", placeholder="예: 믹서기 C300")
 
 if selected_model:
-    if NAVER_CLIENT_ID == "여기에_Client_ID_입력":
-        st.warning("⚠️ 코드 상단에 네이버 API 키(Client ID, Secret)를 먼저 입력해 주세요.")
+    if NAVER_CLIENT_ID == "여기에_Client_ID_입력" or NAVER_CLIENT_ID == "":
+        st.warning("⚠️ 코드 9~10번째 줄에 네이버 API 키(Client ID, Secret)를 먼저 입력해 주세요.")
     else:
         with st.spinner('실시간 네이버 쇼핑 최저가 데이터를 불러오는 중입니다...'):
             items = get_naver_shopping_data(selected_model)
@@ -81,10 +81,10 @@ if selected_model:
             st.markdown("---")
             st.write("📋 **전체 판매처 가격 비교 (최저가순)**")
             
-            # 표에 상품 링크를 클릭할 수 있도록 컬럼 설정
+            # 💡 최신 Streamlit 문법(width='stretch') 반영 완료
             st.dataframe(
                 df, 
-                width='stretch',
+                width='stretch', 
                 hide_index=True,
                 column_config={
                     "링크": st.column_config.LinkColumn("해당 쇼핑몰로 이동")
