@@ -84,7 +84,7 @@ if selected_model:
             # 표에 상품 링크를 클릭할 수 있도록 컬럼 설정
             st.dataframe(
                 df, 
-                use_container_width=True, 
+                width='stretch',
                 hide_index=True,
                 column_config={
                     "링크": st.column_config.LinkColumn("해당 쇼핑몰로 이동")
